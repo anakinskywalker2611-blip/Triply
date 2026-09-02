@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wanderly - Travel Planner</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f7f7f5;
+            color: #252525;
+        }
+
+        button,
+        input,
+        select {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        /* NAVBAR */
+        nav {
+            height: 70px;
+            padding: 0 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: white;
+            border-bottom: 1px solid #e9e9e9;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .logo span {
+            font-weight: 400;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #555;
+            font-size: 14px;
+        }
+
+        nav a:hover {
+            color: #111;
+        }
+
+        .nav-btn {
+            border: none;
+            background: #252525;
+            color: white;
+            padding: 11px 20px;
+            border-radius: 25px;
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 540px;
+            padding: 80px 7%;
+            display: flex;
+            align-items: center;
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(0,0,0,.68),
+                    rgba(0,0,0,.20)
+                ),
+                url("https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1800&q=80");
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+
+        .hero-content {
+            max-width: 600px;
+        }
+
+        .hero small {
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            font-size: clamp(45px, 7vw, 82px);
+            line-height: .95;
+            margin: 18px 0;
+            letter-spacing: -4px;
+        }
+
+        .hero p {
+            font-size: 17px;
+            line-height: 1.7;
+            max-width: 500px;
+            color: #eee;
+        }
+
+        .hero-btn {
+            margin-top: 28px;
+            border: none;
+            padding: 14px 25px;
+            border-radius: 30px;
+            background: white;
+            color: #222;
+            font-weight: bold;
+        }
+
+        /* GENERAL */
+        section {
+            padding: 80px 7%;
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            margin-bottom: 35px;
+        }
+
+        .section-title h2 {
+            font-size: 38px;
+            letter-spacing: -1.5px;
+        }
+
+        .section-title p {
+            color: #777;
+            max-width: 420px;
+            line-height: 1.6;
+        }
+
+        /* DESTINATIONS */
+        .destinations {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .destination-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 25px rgba(0,0,0,.05);
+            transition: .3s;
+        }
+
+        .destination-card:hover {
+            transform: translateY(-6px);
+        }
+
+        .destination-img {
+            height: 250px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .destination-info {
+            padding: 20px;
+        }
+
+        .destination-info h3 {
+            font-size: 22px;
+            margin-bottom: 7px;
+        }
+
+        .destination-info p {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .destination-tag {
+            display: inline-block;
+            margin-top: 15px;
+            background: #f0f0ed;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        /* PLANNER */
+        .planner-section {
+            background: #eaeae5;
+        }
+
+        .planner {
+            max-width: 850px;
+            margin: auto;
+            background: white;
+            padding: 35px;
+            border-radius: 25px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        input,
+        select {
+            border: 1px solid #ddd;
+            padding: 13px;
+            border-radius: 10px;
+            outline: none;
+            background: white;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #555;
+        }
+
+        .create-btn {
+            width: 100%;
+            border: none;
+            padding: 15px;
+            margin-top: 25px;
+            background: #252525;
+            color: white;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+
+        /* DASHBOARD */
+        #dashboard {
+            display: none;
+            background: #f7f7f5;
+        }
+
+        .dashboard-header {
+            background: #252525;
+            color: white;
+            padding: 35px;
+            border-radius: 25px;
+            margin-bottom: 25px;
+        }
+
+        .dashboard-header h2 {
+            font-size: 34px;
+            margin-bottom: 8px;
+        }
+
+        .dashboard-header p {
+            color: #ccc;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+        }
+
+        .stat-card small {
+            color: #888;
+        }
+
+        .stat-card h3 {
+            margin-top: 8px;
+            font-size: 25px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .panel {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+        }
+
+        .panel h3 {
+            margin-bottom: 20px;
+        }
+
+        /* ITINERARY */
+        .activity {
+            display: flex;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .activity:last-child {
+            border-bottom: none;
+        }
+
+        .activity-time {
+            width: 55px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .activity-content strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .activity-content span {
+            color: #888;
+            font-size: 13px;
+        }
+
+        .add-btn {
+            border: 1px dashed #aaa;
+            background: white;
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        /* BUDGET */
+        .budget-total {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .budget-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .budget-input input {
+            flex: 1;
+        }
+
+        .budget-input button {
+            border: none;
+            background: #252525;
+            color: white;
+            padding: 0 18px;
+            border-radius: 10px;
+        }
+
+        .progress {
+            height: 9px;
+            background: #eee;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: #252525;
+            transition: .4s;
+        }
+
+        /* PACKING */
+        .packing-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+        }
+
+        .packing-item input {
+            width: 18px;
+            height: 18px;
+        }
+
+        .packing-item.checked span {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        /* MODAL */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+            padding: 20px;
+        }
+
+        .modal-box {
+            width: 100%;
+            max-width: 450px;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+        }
+
+        .modal-box h3 {
+            margin-bottom: 20px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-actions button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+        }
+
+        .save-btn {
+            background: #252525;
+            color: white;
+        }
+
+        .cancel-btn {
+            background: #eee;
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 35px 7%;
+            background: #252525;
+            color: white;
+            text-align: center;
+        }
+
+        footer p {
+            color: #aaa;
+            font-size: 13px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 800px) {
+            nav ul {
+                display: none;
+            }
+
+            .destinations {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid,
+            .dashboard-grid,
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+            .hero {
+                min-height: 600px;
+            }
+
+            section {
+                padding: 60px 5%;
+            }
+
+            .planner {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav>
+        <div class="logo">wander<span>ly.</span></div>
+
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#explore">Explore</a></li>
+            <li><a href="#planner">Plan Trip</a></li>
+        </ul>
+
+        <button class="nav-btn" onclick="scrollToPlanner()">
+            Plan a Trip
+        </button>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <small>Travel smarter</small>
+
+            <h1>Plan your trip.<br>Make memories.</h1>
+
+            <p>
+                Organize your itinerary, calculate your budget,
+                and prepare everything you need for your next adventure.
+            </p>
+
+            <button class="hero-btn" onclick="scrollToPlanner()">
+                Start Planning →
+            </button>
+        </div>
+    </section>
+
+    <!-- EXPLORE -->
+    <section id="explore">
+
+        <div class="section-title">
+            <div>
+                <h2>Explore Indonesia</h2>
+            </div>
+
+            <p>
+                Discover beautiful destinations and find inspiration
+                for your next journey.
+            </p>
+        </div>
+
+        <div class="destinations">
+
+            <div class="destination-card">
+                <img
+                    class="destination-img"
+                    src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=900&q=80"
+                    alt="Bali"
+                >
+
+                <div class="destination-info">
+                    <h3>Bali</h3>
+                    <p>Island • Beach • Culture</p>
+                    <span class="destination-tag">Popular</span>
+                </div>
+            </div>
+
+            <div class="destination-card">
+                <img
+                    class="destination-img"
+                    src="https://images.unsplash.com/photo-1555899434-94d1368aa7af?auto=format&fit=crop&w=900&q=80"
+                    alt="Yogyakarta"
+                >
+
+                <div class="destination-info">
+                    <h3>Yogyakarta</h3>
+                    <p>Culture • History • Food</p>
+                    <span class="destination-tag">Culture</span>
+                </div>
+            </div>
+
+            <div class="destination-card">
+                <img
+                    class="destination-img"
+                    src="https://images.unsplash.com/photo-1539367628448-4bc5c9d171c8?auto=format&fit=crop&w=900&q=80"
+                    alt="Lombok"
+                >
+
+                <div class="destination-info">
+                    <h3>Lombok</h3>
+                    <p>Beach • Nature • Adventure</p>
+                    <span class="destination-tag">Adventure</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- PLANNER -->
+    <section class="planner-section" id="planner">
+
+        <div class="section-title">
+            <div>
+                <h2>Create your trip</h2>
+            </div>
+
+            <p>
+                Enter your trip details and let Wanderly organize
+                your travel dashboard.
+            </p>
+        </div>
+
+        <div class="planner">
+
+            <div class="form-grid">
+
+                <div class="form-group full">
+                    <label>Destination</label>
+                    <input
+                        type="text"
+                        id="destination"
+                        placeholder="e.g. Bali, Indonesia"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Start Date</label>
+                    <input type="date" id="startDate">
+                </div>
+
+                <div class="form-group">
+                    <label>End Date</label>
+                    <input type="date" id="endDate">
+                </div>
+
+                <div class="form-group">
+                    <label>Travelers</label>
+                    <input
+                        type="number"
+                        id="travelers"
+                        min="1"
+                        value="2"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Travel Style</label>
+                    <select id="travelStyle">
+                        <option>Relaxing</option>
+                        <option>Adventure</option>
+                        <option>Cultural</option>
+                        <option>Food Trip</option>
+                        <option>Shopping</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <button class="create-btn" onclick="createTrip()">
+                Create My Trip →
+            </button>
+
+        </div>
+    </section>
+
+    <!-- DASHBOARD -->
+    <section id="dashboard">
+
+        <div class="dashboard-header">
+            <h2 id="tripTitle">Bali Trip</h2>
+            <p id="tripInfo">4 Days • 2 Travelers</p>
+        </div>
+
+        <div class="stats">
+
+            <div class="stat-card">
+                <small>Trip Duration</small>
+                <h3 id="duration">0 Days</h3>
+            </div>
+
+            <div class="stat-card">
+                <small>Total Budget</small>
+                <h3 id="totalBudget">Rp0</h3>
+            </div>
+
+            <div class="stat-card">
+                <small>Packing Progress</small>
+                <h3 id="packingProgress">0%</h3>
+            </div>
+
+        </div>
+
+        <div class="dashboard-grid">
+
+            <!-- ITINERARY -->
+            <div class="panel">
+
+                <h3>Day 01 · Itinerary</h3>
+
+                <div id="activities">
+
+                    <div class="activity">
+                        <div class="activity-time">08:00</div>
+                        <div class="activity-content">
+                            <strong>Breakfast</strong>
+                            <span>Start the day with a good meal</span>
+                        </div>
+                    </div>
+
+                    <div class="activity">
+                        <div class="activity-time">10:00</div>
+                        <div class="activity-content">
+                            <strong>Explore Destination</strong>
+                            <span>Visit your first destination</span>
+                        </div>
+                    </div>
+
+                    <div class="activity">
+                        <div class="activity-time">15:00</div>
+                        <div class="activity-content">
+                            <strong>Free Time</strong>
+                            <span>Enjoy the afternoon</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <button class="add-btn" onclick="openActivityModal()">
+                    + Add Activity
+                </button>
+
+            </div>
+
+            <!-- BUDGET -->
+            <div class="panel">
+
+                <h3>Budget Tracker</h3>
+
+                <div class="budget-total" id="budgetDisplay">
+                    Rp0
+                </div>
+
+                <p style="color:#888; font-size:13px;">
+                    Add your estimated trip expenses.
+                </p>
+
+                <div class="progress">
+                    <div class="progress-bar" id="budgetBar"></div>
+                </div>
+
+                <div class="budget-input">
+                    <input
+                        type="number"
+                        id="budgetInput"
+                        placeholder="e.g. 500000"
+                    >
+
+                    <button onclick="addBudget()">
+                        Add
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- PACKING -->
+            <div class="panel">
+
+                <h3>Packing List</h3>
+
+                <div id="packingList">
+
+                    <label class="packing-item">
+                        <input type="checkbox" onchange="updatePacking()">
+                        <span>Clothes</span>
+                    </label>
+
+                    <label class="packing-item">
+                        <input type="checkbox" onchange="updatePacking()">
+                        <span>Charger</span>
+                    </label>
+
+                    <label class="packing-item">
+                        <input type="checkbox" onchange="updatePacking()">
+                        <span>Power Bank</span>
+                    </label>
+
+                    <label class="packing-item">
+                        <input type="checkbox" onchange="updatePacking()">
+                        <span>Camera</span>
+                    </label>
+
+                    <label class="packing-item">
+                        <input type="checkbox" onchange="updatePacking()">
+                        <span>Toiletries</span>
+                    </label>
+
+                    <label class="packing-item">
+                        <input type="checkbox" onchange="updatePacking()">
+                        <span>Umbrella</span>
+                    </label>
+
+                </div>
+
+            </div>
+
+            <!-- TRAVEL STYLE -->
+            <div class="panel">
+
+                <h3>Trip Style</h3>
+
+                <p style="font-size:40px; margin-bottom:10px;">
+                    ✈️
+                </p>
+
+                <strong id="styleDisplay">
+                    Relaxing
+                </strong>
+
+                <p style="color:#888; margin-top:8px; font-size:13px;">
+                    Your selected travel style.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ACTIVITY MODAL -->
+    <div class="modal" id="activityModal">
+
+        <div class="modal-box">
+
+            <h3>Add Activity</h3>
+
+            <div class="form-group">
+                <label>Activity</label>
+                <input
+                    type="text"
+                    id="activityName"
+                    placeholder="e.g. Visit Tanah Lot"
+                >
+            </div>
+
+            <br>
+
+            <div class="form-group">
+                <label>Time</label>
+                <input type="time" id="activityTime">
+            </div>
+
+            <br>
+
+            <div class="form-group">
+                <label>Notes</label>
+                <input
+                    type="text"
+                    id="activityNotes"
+                    placeholder="Optional"
+                >
+            </div>
+
+            <div class="modal-actions">
+                <button class="cancel-btn" onclick="closeActivityModal()">
+                    Cancel
+                </button>
+
+                <button class="save-btn" onclick="addActivity()">
+                    Save Activity
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>© 2026 Wanderly. Plan less, travel more.</p>
+    </footer>
+
+
+    <script>
+
+        /* =========================
+           GLOBAL DATA
+        ========================= */
+
+        let totalBudget = 0;
+
+        let trip = {
+            destination: "",
+            startDate: "",
+            endDate: "",
+            travelers: 2,
+            style: ""
+        };
+
+
+        /* =========================
+           SCROLL
+        ========================= */
+
+        function scrollToPlanner() {
+            document
+                .getElementById("planner")
+                .scrollIntoView({
+                    behavior: "smooth"
+                });
+        }
+
+
+        /* =========================
+           CREATE TRIP
+        ========================= */
+
+        function createTrip() {
+
+            const destination =
+                document.getElementById("destination").value;
+
+            const startDate =
+                document.getElementById("startDate").value;
+
+            const endDate =
+                document.getElementById("endDate").value;
+
+            const travelers =
+                document.getElementById("travelers").value;
+
+            const style =
+                document.getElementById("travelStyle").value;
+
+
+            if (!destination || !startDate || !endDate) {
+                alert("Please complete your trip details.");
+                return;
+            }
+
+
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+
+            if (end < start) {
+                alert("End date cannot be before start date.");
+                return;
+            }
+
+
+            const duration =
+                Math.ceil(
+                    (end - start) /
+                    (1000 * 60 * 60 * 24)
+                );
+
+
+            trip = {
+                destination,
+                startDate,
+                endDate,
+                travelers,
+                style
+            };
+
+
+            document.getElementById("tripTitle")
+                .textContent = destination + " Trip";
+
+
+            document.getElementById("tripInfo")
+                .textContent =
+                duration +
+                " Days • " +
+                travelers +
+                " Travelers";
+
+
+            document.getElementById("duration")
+                .textContent =
+                duration + " Days";
+
+
+            document.getElementById("styleDisplay")
+                .textContent = style;
+
+
+            document.getElementById("dashboard")
+                .style.display = "block";
+
+
+            document.getElementById("dashboard")
+                .scrollIntoView({
+                    behavior: "smooth"
+                });
+
+
+            localStorage.setItem(
+                "wanderlyTrip",
+                JSON.stringify(trip)
+            );
+        }
+
+
+        /* =========================
+           BUDGET
+        ========================= */
+
+        function addBudget() {
+
+            const input =
+                document.getElementById("budgetInput");
+
+            const amount =
+                Number(input.value);
+
+
+            if (!amount || amount <= 0) {
+                alert("Enter a valid budget.");
+                return;
+            }
+
+
+            totalBudget += amount;
+
+            updateBudget();
+
+            input.value = "";
+        }
+
+
+        function updateBudget() {
+
+            const formatted =
+                new Intl.NumberFormat(
+                    "id-ID",
+                    {
+                        style: "currency",
+                        currency: "IDR",
+                        maximumFractionDigits: 0
+                    }
+                ).format(totalBudget);
+
+
+            document.getElementById("budgetDisplay")
+                .textContent = formatted;
+
+
+            document.getElementById("totalBudget")
+                .textContent = formatted;
+
+
+            const percentage =
+                Math.min(
+                    (totalBudget / 5000000) * 100,
+                    100
+                );
+
+
+            document.getElementById("budgetBar")
+                .style.width = percentage + "%";
+        }
+
+
+        /* =========================
+           PACKING LIST
+        ========================= */
+
+        function updatePacking() {
+
+            const items =
+                document.querySelectorAll(
+                    "#packingList input"
+                );
+
+
+            let checked = 0;
+
+
+            items.forEach(item => {
+
+                const parent =
+                    item.closest(".packing-item");
+
+                if (item.checked) {
+                    checked++;
+                    parent.classList.add("checked");
+                } else {
+                    parent.classList.remove("checked");
+                }
+
+            });
+
+
+            const percentage =
+                Math.round(
+                    (checked / items.length) * 100
+                );
+
+
+            document.getElementById("packingProgress")
+                .textContent = percentage + "%";
+
+
+            localStorage.setItem(
+                "packing",
+                JSON.stringify(
+                    Array.from(items).map(
+                        item => item.checked
+                    )
+                )
+            );
+        }
+
+
+        /* =========================
+           ACTIVITY MODAL
+        ========================= */
+
+        function openActivityModal() {
+
+            document.getElementById("activityModal")
+                .style.display = "flex";
+        }
+
+
+        function closeActivityModal() {
+
+            document.getElementById("activityModal")
+                .style.display = "none";
+        }
+
+
+        function addActivity() {
+
+            const name =
+                document.getElementById("activityName").value;
+
+            const time =
+                document.getElementById("activityTime").value;
+
+            const notes =
+                document.getElementById("activityNotes").value;
+
+
+            if (!name || !time) {
+                alert("Please enter the activity and time.");
+                return;
+            }
+
+
+            const activity =
+                document.createElement("div");
+
+            activity.className = "activity";
+
+
+            activity.innerHTML = `
+                <div class="activity-time">
+                    ${time}
+                </div>
+
+                <div class="activity-content">
+                    <strong>${name}</strong>
+                    <span>
+                        ${notes || "No notes added"}
+                    </span>
+                </div>
+            `;
+
+
+            document
+                .getElementById("activities")
+                .appendChild(activity);
+
+
+            closeActivityModal();
+
+
+            document.getElementById("activityName")
+                .value = "";
+
+            document.getElementById("activityTime")
+                .value = "";
+
+            document.getElementById("activityNotes")
+                .value = "";
+        }
+
+
+        /* =========================
+           LOAD SAVED DATA
+        ========================= */
+
+        window.addEventListener(
+            "DOMContentLoaded",
+            () => {
+
+                const savedTrip =
+                    localStorage.getItem(
+                        "wanderlyTrip"
+                    );
+
+                if (savedTrip) {
+
+                    trip =
+                        JSON.parse(savedTrip);
+
+                    document.getElementById(
+                        "destination"
+                    ).value =
+                        trip.destination;
+
+                    document.getElementById(
+                        "startDate"
+                    ).value =
+                        trip.startDate;
+
+                    document.getElementById(
+                        "endDate"
+                    ).value =
+                        trip.endDate;
+
+                    document.getElementById(
+                        "travelers"
+                    ).value =
+                        trip.travelers;
+
+                    document.getElementById(
+                        "travelStyle"
+                    ).value =
+                        trip.style;
+                }
+
+
+                const savedPacking =
+                    localStorage.getItem(
+                        "packing"
+                    );
+
+                if (savedPacking) {
+
+                    const states =
+                        JSON.parse(savedPacking);
+
+                    const items =
+                        document.querySelectorAll(
+                            "#packingList input"
+                        );
+
+                    items.forEach(
+                        (item, index) => {
+
+                            item.checked =
+                                states[index] || false;
+                        }
+                    );
+
+                    updatePacking();
+                }
+
+            }
+        );
+
+    </script>
+
+</body>
+</html>
+
+
